@@ -1,5 +1,5 @@
 # TicketToCode Challenge
-Ett Event Management System
+Ett Event Management System !
 
 ## Översikt  !
 I detta grupprojekt ska ni skapa ett komplett Event Management-system med Blazor, WebAPI och Entity Framework Core. Systemet ska låta användare bläddra bland, boka och hantera evenemang, samt innehålla administrativa funktioner för att skapa och hantera evenemangen. Ni får även stöd för inloggning från en färdig backend-lösning, medan ni själva implementerar den i er Blazor-klient.
