@@ -7,6 +7,7 @@ public class User
     public string PasswordHash { get; set; }
     public string Role { get; set; } = UserRoles.User; // Default role
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public List<Loan> Loans {get; set;} = new List<Loan>();
 
     public User(string name, string pwd)
     {
