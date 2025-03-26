@@ -11,6 +11,8 @@ public interface ILibraryService
     bool DeleteBook(int id);
     Loan? BorrowBook(int bookId, int userId);
     bool ReturnBook(int loanId);
+    Book? UpdateBook(int id, Book updatedBook);
+
 
     // Metoder för de nya funktionerna
     List<Book> GetMostLoanedBooks();
@@ -94,5 +96,18 @@ public class LibraryService : ILibraryService
             .Where(l => l.UserId == userId && l.ReturnDate == null)  // Lån som ej är återlämnade
             .ToList();
     }
+    public Book? UpdateBook(int id, Book updatedBook)
+{
+    var book = GetBookById(id);
+    if (book == null) return null;
+
+    book.Title = updatedBook.Title;
+    book.Author = updatedBook.Author;
+    book.Genre = updatedBook.Genre;
+    book.IsAvailable = updatedBook.IsAvailable;
+
+    return book;
+}
+
 }
 
