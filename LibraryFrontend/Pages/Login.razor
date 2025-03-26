@@ -1,0 +1,33 @@
+@page "/login"
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<h3>Logga in</h3>
+
+<input @bind="username" placeholder="Användarnamn" />
+<input @bind="password" type="password" placeholder="Lösenord" />
+<button @onclick="Login">Logga in</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p style="color:red">@errorMessage</p>
+}
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string? errorMessage;
+
+    private async Task Login()
+    {
+        if (await AuthService.Login(username, password))
+        {
+            Nav.NavigateTo("/books");
+        }
+        else
+        {
+            errorMessage = "Fel användarnamn eller lösenord.";
+        }
+    }
+}
+﻿
