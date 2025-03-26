@@ -22,5 +22,11 @@ public static class LibraryEndpoints
 
         app.MapPost("/return/{loanId:int}", (int loanId, ILibraryService service) =>
             service.ReturnBook(loanId) ? Results.Ok() : Results.BadRequest());
+
+            app.MapGet("/users/{userId:int}/loans", (int userId, ILibraryService service) =>
+            Results.Ok(service.GetUserLoans(userId)));
+
+        app.MapGet("/stats/most-loaned-books", (ILibraryService service) =>
+            Results.Ok(service.GetMostLoanedBooks()));
     }
 }
