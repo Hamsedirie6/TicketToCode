@@ -1,0 +1,32 @@
+@page "/register"
+@inject AuthService AuthService 
+@inject NavigationManager Nav
+
+<h3>Registrera</h3>
+
+<input @bind="usernam" placeholder="Användarnam" />
+<input @bind="password" type="password" placeholder="Lösenord" />
+<button @onclick="Register">Registrera</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p style="color:red">@errorMessage</p>
+}
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string? errorMessage;
+
+    private async Task Register()
+    {
+        if (await AuthService.Register(username, password))
+        {
+            Nav.NavigateTo("/login");
+        }
+        else 
+        {
+            errorMessage = "Användarnamnet är upptaget.";
+        }
+    }
+}
