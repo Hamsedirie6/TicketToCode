@@ -1,0 +1,27 @@
+@page "/books"
+@inject BookService BookService
+
+<h3>Böcker</h3>
+
+@if (books == null)
+{
+    <p>Laddar...</p>
+}
+else
+{
+    <ul>
+        @foreach (var book in books)
+        {
+            <li>@book.Title av @book.Author (@book.Genre) - @(book.IsAvailable ? Tillgänglig : "Ej tillgänglig")</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Book>? books;
+
+        protected override async Task OnInitializedAsync()
+        {
+            books = await BookService.GetAllBooks();
+        }
+}
