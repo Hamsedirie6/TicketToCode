@@ -28,7 +28,7 @@ public class LibraryService : ILibraryService
 
     public Book AddBook(Book book)
     {
-        book.Id = _database.Books.Count + 1;
+        book.Id = _database.Books.Any() ? _database.Books.Max(p => p.Id) + 1 : 1;
         _database.Books.Add(book);
         return book;
     }
@@ -45,6 +45,14 @@ public class LibraryService : ILibraryService
     {
         var book = GetBookById(bookId);
         if (book == null || !book.IsAvailable) return null; 
+
+        var existingLoan = _database.Loans.FirstOrDefault(p => p.UserId == userId && p.BookId == bookId && p.ReturnDate == null);
+        if (existingLoan != null)
+        {
+            return null;
+        }
+
+        
 
         book.IsAvailable = false;
         var loan = new Loan { Id = _database.Loans.Count + 1, BookId = bookId, UserId = userId };
