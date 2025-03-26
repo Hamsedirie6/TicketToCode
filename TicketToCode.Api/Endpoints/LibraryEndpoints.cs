@@ -18,10 +18,12 @@ public static class LibraryEndpoints
             service.DeleteBook(id) ? Results.NoContent() : Results.NotFound());
 
         app.MapPost("/borrow/{bookId:int}/{userId:int}", (int bookId, int userId, ILibraryService service) =>
-            service.BorrowBook(bookId, userId) is Loan loan ? Results.Ok(loan) : Results.BadRequest());
+            service.BorrowBook(bookId, userId) is Loan loan ? Results.Ok(loan) : Results.BadRequest("Book is not available or user is invalid"));
 
         app.MapPost("/return/{loanId:int}", (int loanId, ILibraryService service) =>
-            service.ReturnBook(loanId) ? Results.Ok() : Results.BadRequest());
+            service.ReturnBook(loanId) ? Results.Ok("Book returned successfully") : Results.BadRequest("Invalid loan ID"));
+
+
 
             app.MapGet("/users/{userId:int}/loans", (int userId, ILibraryService service) =>
             Results.Ok(service.GetUserLoans(userId)));
