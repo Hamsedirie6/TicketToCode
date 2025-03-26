@@ -30,5 +30,9 @@ public static class LibraryEndpoints
 
         app.MapGet("/stats/most-loaned-books", (ILibraryService service) =>
             Results.Ok(service.GetMostLoanedBooks()));
+
+        app.MapPut("/books/{id:int}", (int id, Book updatedBook, ILibraryService service) =>
+    service.UpdateBook(id, updatedBook) is Book book ? Results.Ok(book) : Results.NotFound());
+
     }
 }
