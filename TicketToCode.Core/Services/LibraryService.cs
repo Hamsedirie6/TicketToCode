@@ -11,6 +11,10 @@ public interface ILibraryService
     bool DeleteBook(int id);
     Loan? BorrowBook(int bookId, int userId);
     bool ReturnBook(int loanId);
+
+    // Metoder för de nya funktionerna
+    List<Book> GetMostLoanedBooks();
+    List<Loan> GetUserLoans(int userId);
 }
 
 public class LibraryService : ILibraryService
@@ -44,7 +48,7 @@ public class LibraryService : ILibraryService
     public Loan? BorrowBook(int bookId, int userId)
     {
         var book = GetBookById(bookId);
-        if (book == null || !book.IsAvailable) return null; 
+        if (book == null || !book.IsAvailable) return null;
 
         book.IsAvailable = false;
         var loan = new Loan { Id = _database.Loans.Count + 1, BookId = bookId, UserId = userId };
@@ -62,4 +66,25 @@ public class LibraryService : ILibraryService
         if (book != null) book.IsAvailable = true;
         return true;
     }
+
+    // Metod för att hämta de mest utlånade böckerna
+    public List<Book> GetMostLoanedBooks()
+    {
+        var mostLoanedBooks = _database.Loans
+            .GroupBy(l => l.BookId)
+            .OrderByDescending(g => g.Count())
+            .Take(5)  //  de fem mest utlånade böckerna
+            .Select(g => _database.Books.FirstOrDefault(b => b.Id == g.Key))
+            .ToList();
+
+        return mostLoanedBooks;
+    }
+
+    public List<Loan> GetUserLoans(int userId)
+    {
+        return _database.Loans
+            .Where(l => l.UserId == userId && l.ReturnDate == null)  // Lån som ej är återlämnade
+            .ToList();
+    }
 }
+
