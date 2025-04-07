@@ -2,9 +2,10 @@ using Microsoft.AspNetCore.Http;
 using TicketToCode.Api.Services;
 using TicketToCode.Core.Models;
 
-namespace TicketToCode.Api.Endpoints;
+namespace TicketToCode.Api.Endpoints
+{
 
-public static class LibraryEndpoints
+public  class LibraryEndpoints : IEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -35,4 +36,4 @@ public static class LibraryEndpoints
     service.UpdateBook(id, updatedBook) is Book book ? Results.Ok(book) : Results.NotFound());
 
     }
-}
+}}
