@@ -1,0 +1,67 @@
+﻿@page "/add-book"
+@inject HttpClient Http
+
+<h3>Lägg till bok</h3>
+
+<EditForm Model="@book" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Titel:</label>
+        <InputText @bind-Value="book.Title" class="form-control" />
+        <ValidationMessage For="@(() => book.Title)" />
+    </div>
+
+    <div>
+        <label>Författare:</label>
+        <InputText @bind-Value="book.Author" class="form-control" />
+        <ValidationMessage For="@(() => book.Author)" />
+    </div>
+
+    <div>
+        <label>År:</label>
+        <InputNumber @bind-Value="book.Year" class="form-control" />
+        <ValidationMessage For="@(() => book.Year)" />
+    </div>
+
+    <div>
+        <label>ISBN:</label>
+        <InputText @bind-Value="book.ISBN" class="form-control" />
+        <ValidationMessage For="@(() => book.ISBN)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spara bok</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <p>@message</p>
+}
+
+@code {
+    private BookInputModel book = new();
+    private string? message;
+
+    private async Task HandleValidSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("https://localhost:7206/books", book);
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Boken har lagts till!";
+            book = new(); // Töm formuläret
+        }
+        else
+        {
+            message = "Något gick fel!";
+        }
+    }
+
+    public class BookInputModel
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Author { get; set; } = string.Empty;
+        public int Year { get; set; }
+        public string ISBN { get; set; } = string.Empty;
+    }
+}
