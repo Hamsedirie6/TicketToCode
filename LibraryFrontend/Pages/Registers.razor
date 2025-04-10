@@ -4,9 +4,9 @@
 
 <h3>Registrera</h3>
 
-<input @bind="usernam" placeholder="Användarnam" />
+<input @bind="username" placeholder="Användarnamn" />
 <input @bind="password" type="password" placeholder="Lösenord" />
-<button @onclick="Register">Registrera</button>
+<button @onclick="HandleRegister">Registrera</button>
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -18,7 +18,7 @@
     private string password = "";
     private string? errorMessage;
 
-    private async Task Register()
+    private async Task HandleRegister()
     {
         if (await AuthService.Register(username, password))
         {
