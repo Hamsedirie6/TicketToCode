@@ -1,3 +1,4 @@
+@using LibraryFrontend.Models
 @page "/books"
 @inject BookService BookService
 
@@ -12,7 +13,7 @@ else
     <ul>
         @foreach (var book in books)
         {
-            <li>@book.Title av @book.Author (@book.Genre) - @(book.IsAvailable ? Tillgänglig : "Ej tillgänglig")</li>
+            <li>@book.Title av @book.Author (@book.Genre) - @(book.IsAvailable ? "Tillgänglig" : "Ej tillgänglig")</li>
         }
     </ul>
 }
