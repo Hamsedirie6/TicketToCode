@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketToCode.Api", "TicketT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketToCode.Core", "TicketToCode.Core\TicketToCode.Core.csproj", "{2972C6A3-9CC4-449E-BBB4-DE06BC8B5E9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketToCode.Client", "TicketToCode.Client\TicketToCode.Client.csproj", "{14B0D1FC-125F-4149-AD33-F15AE6DBEA6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryFrontend", "LibraryFrontend\LibraryFrontend.csproj", "{629A5D8A-F81A-48AD-84BB-A825388C772C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{2972C6A3-9CC4-449E-BBB4-DE06BC8B5E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2972C6A3-9CC4-449E-BBB4-DE06BC8B5E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2972C6A3-9CC4-449E-BBB4-DE06BC8B5E9D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14B0D1FC-125F-4149-AD33-F15AE6DBEA6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14B0D1FC-125F-4149-AD33-F15AE6DBEA6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14B0D1FC-125F-4149-AD33-F15AE6DBEA6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14B0D1FC-125F-4149-AD33-F15AE6DBEA6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{629A5D8A-F81A-48AD-84BB-A825388C772C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{629A5D8A-F81A-48AD-84BB-A825388C772C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{629A5D8A-F81A-48AD-84BB-A825388C772C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{629A5D8A-F81A-48AD-84BB-A825388C772C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

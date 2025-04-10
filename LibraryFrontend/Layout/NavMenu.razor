@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">LibraryFrontend</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -9,38 +12,44 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="nav flex-column">
+
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
+
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" href="books">
+                <span class="bi bi-book-nav-menu" aria-hidden="true"></span> Böcker
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-    <NavLink class="nav-link" href="login">
-        <span class="bi bi-box-arrow-in-right-nav-menu" aria-hidden="true"></span> Logga in
-    </NavLink>
-</div>
-<div class="nav-item px-3">
-    <NavLink class="nav-link" href="register">
-        <span class="bi bi-person-plus-fill-nav-menu" aria-hidden="true"></span> Registrera
-    </NavLink>
-</div>
-<div class="nav-item px-3">
-    <NavLink class="nav-link" href="books">
-        <span class="bi bi-book-nav-menu" aria-hidden="true"></span> Böcker
-    </NavLink>
-</div>
 
+        @if (!AuthService.IsLoggedIn)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="login">
+                    <span class="bi bi-box-arrow-in-right-nav-menu" aria-hidden="true"></span> Logga in
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="register">
+                    <span class="bi bi-person-plus-fill-nav-menu" aria-hidden="true"></span> Registrera
+                </NavLink>
+            </div>
+        }
+        else
+        {
+            <div class="nav-item px-3">
+                <span class="nav-link disabled">
+                    👋 Inloggad som <strong>@AuthService.Username</strong> (@AuthService.Role)
+                </span>
+            </div>
 
+            <div class="nav-item px-3">
+                <a class="nav-link" href="#" @onclick="LogOut">🚪 Logga ut</a>
+            </div>
+        }
     </nav>
 </div>
 
@@ -52,5 +61,11 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void LogOut()
+    {
+        AuthService.Logout();
+        Nav.NavigateTo("/");
     }
 }

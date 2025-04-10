@@ -7,7 +7,7 @@
         "Action": "Start"
       },
       {
-        "Path": "TicketToCode.Client\\TicketToCode.Client.csproj",
+        "Path": "LibraryFrontend\\LibraryFrontend.csproj",
         "Action": "Start"
       }
     ]
