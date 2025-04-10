@@ -1,6 +1,7 @@
-@using LibraryFrontend.Models
 @page "/books"
 @inject BookService BookService
+@using LibraryFrontend.Models
+@inject IJSRuntime JS
 
 <h3>Böcker</h3>
 
@@ -8,21 +9,122 @@
 {
     <p>Laddar...</p>
 }
+else if (books.Count == 0)
+{
+    <p>Inga böcker tillgängliga.</p>
+}
 else
 {
     <ul>
         @foreach (var book in books)
         {
-            <li>@book.Title av @book.Author (@book.Genre) - @(book.IsAvailable ? "Tillgänglig" : "Ej tillgänglig")</li>
+            <li>
+                <strong>@book.Title</strong> av @book.Author (@book.Genre)
+                – @(book.IsAvailable ? "Tillgänglig" : "Ej tillgänglig")
+
+                <!-- Tillfällig admin-knapp, vi lägger till rollstyrning senare -->
+                <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteBook(book.Id)">🗑️ Ta bort</button>
+            </li>
         }
     </ul>
 }
 
+<hr />
+
+<h4>Lägg till ny bok</h4>
+
+<EditForm Model="newBook" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label>Titel:</label><br />
+        <InputText @bind-Value="newBook.Title" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Författare:</label><br />
+        <InputText @bind-Value="newBook.Author" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Genre:</label><br />
+        <InputText @bind-Value="newBook.Genre" class="form-control" />
+    </div>
+
+    <div class="mt-2">
+        <button class="btn btn-primary" type="submit">Lägg till bok</button>
+    </div>
+</EditForm>
+
+@if (formMessage != null)
+{
+    <p class="@(formMessage.StartsWith("❌") || formMessage.StartsWith("🔥") || formMessage.StartsWith("🚫") ? "text-danger" : "text-success")">
+        @formMessage
+    </p>
+}
+
 @code {
     private List<Book>? books;
+    private Book newBook = new Book();
+    private string? formMessage;
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBooks();
+    }
+
+    private async Task LoadBooks()
+    {
+        try
         {
             books = await BookService.GetAllBooks();
         }
+        catch (Exception ex)
+        {
+            formMessage = $"🔥 FEL vid laddning av böcker: {ex.Message}";
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        newBook.IsAvailable = true;
+
+        try
+        {
+            var success = await BookService.AddBook(newBook);
+            if (success)
+            {
+                formMessage = "✅ Boken har lagts till!";
+                newBook = new Book();
+                await LoadBooks();
+            }
+            else
+            {
+                formMessage = "❌ Misslyckades att lägga till boken.";
+            }
+        }
+        catch (Exception ex)
+        {
+            formMessage = $"🔥 FEL: {ex.Message}";
+        }
+    }
+
+    private async Task DeleteBook(int id)
+    {
+        var confirm = await JS.InvokeAsync<bool>("confirm", "Är du säker på att du vill ta bort denna bok?");
+        if (!confirm) return;
+
+        var result = await BookService.DeleteBook(id);
+        if (result)
+        {
+            formMessage = "❌ Boken har tagits bort.";
+            await LoadBooks();
+        }
+        else
+        {
+            formMessage = "🚫 Misslyckades att ta bort boken.";
+        }
+    }
 }
+

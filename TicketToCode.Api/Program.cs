@@ -1,20 +1,30 @@
-using TicketToCode.Api.Endpoints;
+﻿using TicketToCode.Api.Endpoints;
 using TicketToCode.Api.Services;
 using TicketToCode.Core.Data;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-// Default mapping is /openapi/v1.json
+// Add services to the container
 builder.Services.AddOpenApi();
- 
+
 builder.Services.AddSingleton<IDatabase, Database>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 
+// ✅ Lägg till CORS-policy
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
-// Add cookie authentication
+// Cookie authentication
 builder.Services.AddAuthentication("Cookies")
     .AddCookie("Cookies", options =>
     {
@@ -27,13 +37,11 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 
-    // Todo: consider scalar? https://youtu.be/Tx49o-5tkis?feature=shared
-    app.UseSwaggerUI( options =>
+    app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/openapi/v1.json", "v1");
         options.DefaultModelsExpandDepth(-1);
@@ -41,11 +49,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// ✅ Aktivera CORS före Authentication/Authorization
+app.UseCors();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map all endpoints
+// Map endpoints
 app.MapEndpoints<Program>();
 
 app.Run();
-
